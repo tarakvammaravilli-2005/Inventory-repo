@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Combined Animation</title>
+
+<style>
+/* ---------- GLOBAL STYLES ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Lato', sans-serif;
+  background: hsl(0 0% 0%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4rem;
+  padding: 2rem;
+}
+
+/* background grid lines */
+body::before {
+  --line: hsl(0 0% 95% / 0.25);
+  content: "";
+  height: 300vh;
+  width: 100vw;
+  position: fixed;
+  background:
+    linear-gradient(90deg, var(--line) 1px, transparent 1px 10vmin) 0 -5vmin / 10vmin 10vmin,
+    linear-gradient(var(--line) 1px, transparent 1px 10vmin) 0 -5vmin / 10vmin 10vmin;
+  mask: linear-gradient(-15deg, transparent 30%, white);
+  top: 0;
+  z-index: -1;
+}
+
+/* ---------- SECTION 1: GLIDE CODE ---------- */
+section.code-section {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+section.code-section p {
+  margin: 0;
+  font-size: 2rem;
+  text-align: center;
+  background: linear-gradient(hsl(0 0% 80%), hsl(0 0% 50%));
+  color: transparent;
+  background-clip: text;
+}
+
+.code {
+  font-size: 3rem;
+  display: flex;
+  flex-wrap: nowrap;
+  color: hsl(0 0% 100%);
+  border-radius: 1rem;
+  background: hsl(0 0% 6%);
+  justify-content: center;
+  box-shadow: 0 1px hsl(0 0% 100% / 0.25) inset;
+}
+
+.code:hover {
+  cursor: grab;
+}
+
+.digit {
+  display: flex;
+  height: 100%;
+  padding: 5.5rem 1rem;
+}
+
+.digit span {
+  scale: calc(var(--active, 0) + 0.5);
+  filter: blur(calc((1 - var(--active, 0)) * 1rem));
+  transition: scale calc(((1 - var(--active, 0)) + 0.2) * 1s), filter calc(((1 - var(--active, 0)) + 0.2) * 1s);
+}
+
+/* lerp values */
+:root {
+  --lerp-0: 1;
+  --lerp-1: 0.77;
+  --lerp-2: 0.7;
+  --lerp-3: 0.57;
+  --lerp-4: 0.42;
+  --lerp-5: 0.26;
+}
+
+.digit:is(:hover, :focus-visible) { --active: var(--lerp-0); }
+.digit:is(:hover, :focus-visible) + .digit,
+.digit:has(+ .digit:is(:hover, :focus-visible)) { --active: var(--lerp-1); }
+.digit:is(:hover, :focus-visible) + .digit + .digit,
+.digit:has(+ .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-2); }
+.digit:is(:hover, :focus-visible) + .digit + .digit + .digit,
+.digit:has(+ .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-3); }
+.digit:is(:hover, :focus-visible) + .digit + .digit + .digit + .digit,
+.digit:has(+ .digit + .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-4); }
+.digit:is(:hover, :focus-visible) + .digit + .digit + .digit + .digit + .digit,
+.digit:has(+ .digit + .digit + .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-5); }
+
+/* ---------- SECTION 2: TRAIL ANIMATIONS ---------- */
+.container {
+  width: 100%;
+  text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.animate {
+  font-size: 50px;
+  margin: 20px 0;
+}
+
+.animate span {
+  display: inline-block;
+  opacity: 0;
+}
+
+/* animation styles */
+.one span {
+  color: #24a8e6;
+  transform: translate(-150px, -50px) rotate(-180deg) scale(3);
+  animation: revolveScale .4s forwards;
+}
+@keyframes revolveScale {
+  60% { transform: translate(20px,20px) rotate(30deg) scale(.3); }
+  100% { transform: translate(0) rotate(0) scale(1); opacity: 1; }
+}
+
+.two span {
+  color: #a5cb21;
+  transform: translate(200px,-100px) scale(2);
+  animation: ballDrop .3s forwards;
+}
+@keyframes ballDrop {
+  60% { transform: translate(0,20px) rotate(-180deg) scale(.5); }
+  100% { transform: translate(0) rotate(0) scale(1); opacity: 1; }
+}
+
+.three span {
+  color: #b10e81;
+  transform: translate(-300px,0) scale(0);
+  animation: sideSlide .5s forwards;
+}
+@keyframes sideSlide {
+  60% { transform: translate(20px,0) scale(1); color:#b10e81; }
+  99% { transform: translate(0) scale(1.2); color:#00f0ff; }
+  100% { transform: translate(0) scale(1); opacity:1; color:#b10e81; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Section 1: Glide Reveal Code -->
+<section class="code-section">
+  <p>Glide To Reveal Secret Code</p>
+  <ul class="code">
+    <li tabindex="0" class="digit"><span>0</span></li>
+    <li tabindex="0" class="digit"><span>3</span></li>
+    <li tabindex="0" class="digit"><span>4</span></li>
+    <li tabindex="0" class="digit"><span>8</span></li>
+    <li tabindex="0" class="digit"><span>7</span></li>
+    <li tabindex="0" class="digit"><span>2</span></li>
+  </ul>
+</section>
+
+<!-- Section 2: Trail Animations -->
+<div class="container">
+  <div class="animate one">
+    <span>C</span><span>S</span><span>S</span><span>3</span>&nbsp;
+    <span>A</span><span>N</span><span>I</span><span>M</span><span>A</span><span>T</span><span>I</span><span>O</span><span>N</span><span>S</span>
+  </div>
+
+  <div class="animate two">
+    <span>C</span><span>S</span><span>S</span><span>3</span>&nbsp;
+    <span>A</span><span>N</span><span>I</span><span>M</span><span>A</span><span>T</span><span>I</span><span>O</span><span>N</span><span>S</span>
+  </div>
+
+  <div class="animate three">
+    <span>C</span><span>S</span><span>S</span><span>3</span>&nbsp;
+    <span>A</span><span>N</span><span>I</span><span>M</span><span>A</span><span>T</span><span>I</span><span>O</span><span>N</span><span>S</span>
+  </div>
+</div>
+
+</body>
+</html>
+
